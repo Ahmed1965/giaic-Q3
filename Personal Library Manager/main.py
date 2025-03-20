@@ -1,0 +1,154 @@
+import json
+
+# creating class for library manger
+
+class LibraryManager:
+    """The Library manager will take care about your library"""
+    def __init__(self):
+        self.books = []
+        self.storage_file = 'books_library.json'
+        self.read_from_file()
+    
+    def read_from_file(self):
+        """Load saved book from json file, if the file is empty, create a new one"""
+        try:
+            with open(self.storage_file, 'r') as file:
+                self.books = json.load(file)
+        except (FileNotFoundError, json.JSONDecodeError):
+            self.books = []
+    def save_to_file(self):
+        """Saving file to json formatted file"""
+        with open(self.storage_file, 'w') as file:
+            json.dump(self.books, file, indent=4)
+            
+    def create_new_book(self):
+         """Add a new book to the collection by gathering information from the user."""
+         book_title = input("Enter book title: ")
+         book_author = input("Enter author: ")
+         publication_year = input("Enter publication year: ")
+         book_genre = input("Enter genre: ")
+         is_book_read = (
+             input("Have you read this book? (yes/no): ").strip().lower() == "yes"
+         )
+ 
+         new_book = {
+             "title": book_title,
+             "author": book_author,
+             "year": publication_year,
+             "genre": book_genre,
+             "read": is_book_read,
+         }
+ 
+         self.books.append(new_book)
+         self.save_to_file()
+         print("Book added successfully!\n")
+ 
+        
+    # deleting book from library
+    def delete_book(self):
+        book_title = input('Enter the title of the book you want to delete:')
+        for book in self.books:
+            if book['title'] == book_title:
+                self.books.remove(book)
+                self.save_to_file()
+                print('Book deleted successfully!\n')
+                return
+        print('Book not found in the library.\n')
+        
+        # searching book in library
+    def search_for_book(self):
+        """Ask user for search criteria and return the input"""
+        search_type = input('Enter \n1. Book Name\n2. Author Name\nChoose your option: ').strip().lower()
+        search_term = input('Enter your search term: ').strip().lower()
+        search_book, book_find = search_term, search_type
+        book_found = [
+            book
+            for book in self.books
+            if search_book in book["title"].lower()
+            or search_book in book["author"].lower()
+        ]
+        if book_found:
+            print('Matching Books are find in the library:')
+            
+            for index, book in enumerate(book_found, 1):
+                reading_status = 'Read' if book['read'] else 'Not Read'
+                print(f"{index}. {book['title']} by {book['author']} published in {book['year']} - {reading_status}")
+        else:
+            print('No book found in the library.\n')
+            
+        # updating book in library    
+    def update_book(self):
+            """Update book in the library by getting user input"""
+            book_title = input('Enter the title of the book you want to update:')
+            for book in self.books:
+                if book['title'].lower() == book_title.lower():
+                    print("Leave Blank if you don't want to update the field")
+                    book['title'] = input('Enter the new title:')
+                    book['author'] = input('Enter the new author name:')
+                    book['year'] = input('Enter the new publish year:')
+                    book['genre'] = input('Enter the new genre:')
+                    book['is_read'] = input('Have you read this book? (yes/no):').strip().lower() == 'yes'
+                    
+                book["read"] = (
+                input("Have you read this book? (yes/no):").strip().lower() == "yes"
+            )
+            self.save_to_file()
+            print('Book updated successfully!\n')
+            return
+    print('Book not found in the library.\n')
+        
+    def show_books(self):
+        """Display all books in the library"""
+        print('Books in the library')
+        for index, book in enumerate(self.books, 1):
+            reading_status = 'Read' if book['read'] else 'Not Read'
+            print(f"{index}. {book['title']} by {book['author']} published in {book['year']} - {reading_status}")
+            print()
+    def show_reading_status(self):
+        """"Calculate and display the reading status"""
+        total_books = len(self.books)
+        books_read = sum(1 for book in self.books if book['read'])
+        read_percent = (books_read / total_books) * 100 if total_books > 0 else 0
+        print(f'Total Books: {total_books}\nBooks Read: {books_read}\nBooks Not Read: {total_books - books_read}\nReading Status: {read_percent:.2f}%\n')
+        
+    def start_application(self):
+        """Start the application and display the menu"""
+        while True:
+            print('****************************')
+            print('Welcome to library manager')
+            print('****************************\n')
+            print('1. Add Book')
+            print('2. Delete Book') 
+            print('3. Search for Book')
+            print('4. Update Book')
+            print('5. Show Books')
+            print('6. Show Reading Status')
+            print('7. Exit\n')
+            print('****************')
+            
+            user_choice = input('Enter your Choice:').strip()
+            if user_choice == '1':
+                self.create_new_book()
+            elif user_choice == '2':
+                self.delete_book()
+            elif user_choice == '3':
+                self.search_for_book()
+            elif user_choice == '4':
+                self.update_book()
+            elif user_choice == '5':
+                self.show_books()
+            elif user_choice == '6':
+                self.show_reading_status()
+            elif user_choice == '7':
+                break
+            else:
+                print('Invalid Choice! Please try again.\n')
+                break
+        print('Thank you for using the library manager. Goodbye!')
+                
+if __name__ == '__main__':
+        library_manager = LibraryManager()
+        library_manager.start_application()  
+                       
+                        
+                

@@ -1,0 +1,24 @@
+[
+    {
+        "title": "The Tech",
+        "author": "Muhammad Ahmed",
+        "year": "2025",
+        "genre": "tech",
+        "read": false
+    },
+    {
+        "title": "Tom Tom & Jerry",
+        "author": "Manahil ",
+        "year": "2025",
+        "genre": "fun",
+        "read": true,
+        "is_read": true
+    },
+    {
+        "title": "The Story",
+        "author": "Muhammad Ahmed",
+        "year": "2025",
+        "genre": "About Me",
+        "read": false
+    }
+]
