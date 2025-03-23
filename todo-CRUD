@@ -1,0 +1,36 @@
+import streamlit as st
+import pandas as pd
+
+todays_date = pd.to_datetime('today').date()
+st.subheader('Today\'s Date: {}'.format(todays_date))
+st.title('Welcome to Todos App')
+
+menu = ['Create', 'Read', 'Update', 'Delete', 'About']
+
+choice = st.sidebar.selectbox('Menu', menu)
+
+col1,col2 = st.columns(2)
+with col1:
+    if choice == 'Create':
+        st.subheader('Add Todo')   
+        my_todo = st.text_input('Enter Todo')
+    if my_todo == '':
+        st.error('Please enter a todo')
+    else:
+        my_todo = ''
+    #    st.button('Add Todo')
+    if st.button('Add Todo'):
+        st.success(f'{my_todo} added successfully')
+    elif choice == 'Read':
+        st.subheader('View Todos')
+    elif choice == 'Update':
+        st.subheader('Update Todo')
+    elif choice == 'Delete':
+        st.subheader('Delete Todo')
+    else:
+        st.subheader('About')
+with col2:
+    if choice == 'Create':
+        st.radio('Priority', ['Low', 'Medium', 'High'])
+        st.date_input('Due Date')
+        st.checkbox('Completed', 'Not Complete')     
